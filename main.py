@@ -339,9 +339,9 @@ class App(customtkinter.CTk):
     
     def open_group_member_window(self):
         self.window = AudioWindow(self )
-        self.window.title("Group's Members")
+        self.window.title("Author")
 
-        self.label = customtkinter.CTkLabel(self.window, text="Janos Ahanninkpo\nKarsten Ahouangan\nOsée Allodehou\nHospice Hounfodji\nOrphée Sogbohossou", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.label = customtkinter.CTkLabel(self.window, text="Hospice Hounfodji\nSoftware Developper", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.label.pack(padx=20, pady=20)
 
     def select_directory(self):
