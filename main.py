@@ -50,7 +50,7 @@ class App(customtkinter.CTk):
         # self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, text="Text to Speech", command=self.sidebar_button_event)
         # self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
 
-        self.sidebar_button_groupe_member = customtkinter.CTkButton(self.sidebar_frame, text="Group's Members", command=self.open_group_member_window)
+        self.sidebar_button_groupe_member = customtkinter.CTkButton(self.sidebar_frame, text="Author", command=self.open_group_member_window)
         self.sidebar_button_groupe_member.grid(row=1, column=0, padx=20, pady=10)
        
      
