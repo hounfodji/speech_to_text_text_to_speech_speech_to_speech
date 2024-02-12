@@ -2,6 +2,7 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 import pyttsx3
+from gtts import gTTS 
 import os
 import speech_recognition as sr
 import sounddevice
@@ -23,6 +24,73 @@ recognized_text = ""
 
 text_to_translate = ""
 text_translated = ""
+
+# Variable pour la langue choisie pour ltts
+language_choosed = ""
+
+# available language for gtts
+# Note: this file is generated
+langs = {
+    "af": "Afrikaans",
+    "ar": "Arabic",
+    "bg": "Bulgarian",
+    "bn": "Bengali",
+    "bs": "Bosnian",
+    "ca": "Catalan",
+    "cs": "Czech",
+    "da": "Danish",
+    "de": "German",
+    "el": "Greek",
+    "en": "English",
+    "es": "Spanish",
+    "et": "Estonian",
+    "fi": "Finnish",
+    "fr": "French",
+    "gu": "Gujarati",
+    "hi": "Hindi",
+    "hr": "Croatian",
+    "hu": "Hungarian",
+    "id": "Indonesian",
+    "is": "Icelandic",
+    "it": "Italian",
+    "iw": "Hebrew",
+    "ja": "Japanese",
+    "jw": "Javanese",
+    "km": "Khmer",
+    "kn": "Kannada",
+    "ko": "Korean",
+    "la": "Latin",
+    "lv": "Latvian",
+    "ml": "Malayalam",
+    "mr": "Marathi",
+    "ms": "Malay",
+    "my": "Myanmar (Burmese)",
+    "ne": "Nepali",
+    "nl": "Dutch",
+    "no": "Norwegian",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "si": "Sinhala",
+    "sk": "Slovak",
+    "sq": "Albanian",
+    "sr": "Serbian",
+    "su": "Sundanese",
+    "sv": "Swedish",
+    "sw": "Swahili",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "th": "Thai",
+    "tl": "Filipino",
+    "tr": "Turkish",
+    "uk": "Ukrainian",
+    "ur": "Urdu",
+    "vi": "Vietnamese",
+    "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)"
+}
+
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -73,7 +141,7 @@ class App(customtkinter.CTk):
 
         # -----------------------Text To Speech panel-----------------------------
         self.textbox_tts = customtkinter.CTkTextbox(self.tabview.tab("Text To Speech"), width=700, height=250)
-        self.textbox_tts.grid(row=1, column=0, padx=50, pady=(20,10))
+        self.textbox_tts.grid(row=1, column=1, padx=50, pady=(20,10))
 
         self.option_frame = customtkinter.CTkFrame(self.tabview.tab("Text To Speech"))
         self.option_frame.grid(row=2, column=1, padx=(20, 20), pady=(20, 0))
@@ -101,11 +169,23 @@ class App(customtkinter.CTk):
         self.radio_button_normal.grid(row=2, column=1, pady=10, padx=20, sticky="n")
         self.radio_button_slow = customtkinter.CTkRadioButton(master=self.speed_frame, text="Slow", variable=self.radio_var_speed, value=2)
         self.radio_button_slow.grid(row=3, column=1, pady=10, padx=20, sticky="n")
+        
+        
+        # create frame for languages
+        self.available_languages_frame = customtkinter.CTkFrame(self.option_frame)
+        self.available_languages_frame.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
+        
+        # create option menu for available language 
+        self.available_languages_frame_label = customtkinter.CTkLabel(self.available_languages_frame, text="Available languages:", anchor="w")
+        self.available_languages_frame_label.grid(row=0, column=0, padx=20, pady=(10, 0))
+        self.available_languages_frame_optionemenu = customtkinter.CTkOptionMenu(self.available_languages_frame, values=list(langs.values()),
+                                                                       command=self.choose_language)
+        self.available_languages_frame_optionemenu.grid(row=1, column=0, padx=20, pady=(10, 10))
 
-        # Create buttons for output
+        # Create frame for output button
         self.output_frame_tts = customtkinter.CTkFrame(self.option_frame)
-        self.output_frame_tts.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
-
+        self.output_frame_tts.grid(row=0, column=3, padx=(20, 20), pady=(20, 0))
+        # Create buttons for output
         self.speak_button = customtkinter.CTkButton(self.output_frame_tts, text="Speak", command=self.speak_now)
         self.speak_button.grid(row=0, column=0, padx=20, pady=10)
 
@@ -151,6 +231,9 @@ class App(customtkinter.CTk):
         self.radio_button_english.grid(row=1, column=1, pady=10, padx=20, sticky="n")
         self.radio_button_french = customtkinter.CTkRadioButton(master=self.translate_language_frame, text="French", variable=self.radio_var_translate_language, value=1)
         self.radio_button_french.grid(row=2, column=1, pady=10, padx=20, sticky="n")
+        
+        
+        
 
         # Create buttons for output
         self.output_frame_stt = customtkinter.CTkFrame(self.option_frame_stt)
@@ -167,28 +250,42 @@ class App(customtkinter.CTk):
     # Play instanly
     def speak_now(self):
         text_from_textbox_tts = self.textbox_tts.get("0.0", "end")
-        gender = self.radio_var_voice.get()
-        speed = self.radio_var_speed.get()
-        voices = engine.getProperty("voices")
+        # gender = self.radio_var_voice.get()
+        # speed = self.radio_var_speed.get()
+        # voices = engine.getProperty("voices")
 
-        def setvoice():
-            if gender == 0: # male
-                engine.setProperty("voice", voices[0].id)
-            else:
-                engine.setProperty("voice", voices[1].id)
-            engine.say(text_from_textbox_tts)
-            engine.runAndWait()
+        # def setvoice():
+        #     if gender == 0: # male
+        #         engine.setProperty("voice", voices[0].id)
+        #     else:
+        #         engine.setProperty("voice", voices[1].id)
+        #     engine.say(text_from_textbox_tts)
+        #     engine.runAndWait()
 
-        if text_from_textbox_tts: 
-            if speed == 0: # fast
-                engine.setProperty("rate", 250)
-                setvoice()
-            elif speed == 1: # normal
-                engine.setProperty("rate", 175)
-                setvoice()
-            else:
-                engine.setProperty("rate", 75) # slow
-                setvoice()
+        # if text_from_textbox_tts: 
+        #     if speed == 0: # fast
+        #         engine.setProperty("rate", 250)
+        #         setvoice()
+        #     elif speed == 1: # normal
+        #         engine.setProperty("rate", 175)
+        #         setvoice()
+        #     else:
+        #         engine.setProperty("rate", 75) # slow
+        #         setvoice()
+        # Language in which you want to convert 
+        # print(self.choose_language)
+        language = list(langs.keys())[list(langs.values()).index(language_choosed)]
+        # Passing the text and language to the engine,  
+        # here we have marked slow=False. Which tells  
+        # the module that the converted audio should  
+        # have a high speed 
+        myobj = gTTS(text=text_from_textbox_tts, lang=language, slow=False)
+        # Saving the converted audio in a mp3 file named 
+        # welcome  
+        myobj.save("welcome.mp3") 
+        
+        # Playing the converted file 
+        os.system("mpg321 welcome.mp3") 
         
         # print(gender, speed)
                 
@@ -305,7 +402,11 @@ class App(customtkinter.CTk):
         self.textbox_stt.insert("end", text_translated)
         self.textbox_tts.insert("0.0", text_translated)
 
-
+    def choose_language(self, language):
+        global language_choosed
+        language_choosed = language
+        print(language_choosed)
+        
 
     def open_input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="CTkInputDialog")
@@ -315,6 +416,7 @@ class App(customtkinter.CTk):
         print("sidebar_button click")
 
     def change_appearance_mode_event(self, new_appearance_mode: str):
+        # print(new_appearance_mode)
         customtkinter.set_appearance_mode(new_appearance_mode)
 
     def change_scaling_event(self, new_scaling: str):
