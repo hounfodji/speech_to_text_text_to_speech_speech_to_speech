@@ -147,33 +147,33 @@ class App(customtkinter.CTk):
         self.option_frame.grid(row=2, column=1, padx=(20, 20), pady=(20, 0))
 
         # create radiobutton frame for voice
-        self.voice_frame = customtkinter.CTkFrame(self.option_frame)
-        self.voice_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0))
-        self.radio_var_voice = tkinter.IntVar(value=0)
-        self.label_radio_group_voice = customtkinter.CTkLabel(master=self.voice_frame, text="Voice")
-        self.label_radio_group_voice.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
-        self.radio_button_male = customtkinter.CTkRadioButton(master=self.voice_frame, text="Male", variable=self.radio_var_voice, value=0)
-        self.radio_button_male.grid(row=1, column=1, pady=10, padx=20, sticky="n")
-        self.radio_button_female = customtkinter.CTkRadioButton(master=self.voice_frame, text="Female", variable=self.radio_var_voice, value=1)
-        self.radio_button_female.grid(row=2, column=1, pady=10, padx=20, sticky="n")
+        # self.voice_frame = customtkinter.CTkFrame(self.option_frame)
+        # self.voice_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0))
+        # self.radio_var_voice = tkinter.IntVar(value=0)
+        # self.label_radio_group_voice = customtkinter.CTkLabel(master=self.voice_frame, text="Voice")
+        # self.label_radio_group_voice.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
+        # self.radio_button_male = customtkinter.CTkRadioButton(master=self.voice_frame, text="Male", variable=self.radio_var_voice, value=0)
+        # self.radio_button_male.grid(row=1, column=1, pady=10, padx=20, sticky="n")
+        # self.radio_button_female = customtkinter.CTkRadioButton(master=self.voice_frame, text="Female", variable=self.radio_var_voice, value=1)
+        # self.radio_button_female.grid(row=2, column=1, pady=10, padx=20, sticky="n")
 
         # create radiobutton frame for speed
         self.speed_frame = customtkinter.CTkFrame(self.option_frame)
-        self.speed_frame.grid(row=0, column=1, padx=(20, 20), pady=(30, 0))
+        self.speed_frame.grid(row=0, column=0, padx=(20, 20), pady=(30, 0))
         self.radio_var_speed = tkinter.IntVar(value=0)
         self.label_radio_group_speed = customtkinter.CTkLabel(master=self.speed_frame, text="Speed")
         self.label_radio_group_speed.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
-        self.radio_button_fast = customtkinter.CTkRadioButton(master=self.speed_frame, text="Fast",  variable=self.radio_var_speed, value=0)
-        self.radio_button_fast.grid(row=1, column=1, pady=10, padx=20, sticky="n")
-        self.radio_button_normal = customtkinter.CTkRadioButton(master=self.speed_frame, text="Normal", variable=self.radio_var_speed, value=1)
-        self.radio_button_normal.grid(row=2, column=1, pady=10, padx=20, sticky="n")
-        self.radio_button_slow = customtkinter.CTkRadioButton(master=self.speed_frame, text="Slow", variable=self.radio_var_speed, value=2)
-        self.radio_button_slow.grid(row=3, column=1, pady=10, padx=20, sticky="n")
+        # self.radio_button_fast = customtkinter.CTkRadioButton(master=self.speed_frame, text="Fast",  variable=self.radio_var_speed, value=0)
+        # self.radio_button_fast.grid(row=1, column=1, pady=10, padx=20, sticky="n")
+        self.radio_button_normal = customtkinter.CTkRadioButton(master=self.speed_frame, text="Normal", variable=self.radio_var_speed, value=0)
+        self.radio_button_normal.grid(row=1, column=1, pady=10, padx=20, sticky="n")
+        self.radio_button_slow = customtkinter.CTkRadioButton(master=self.speed_frame, text="Slow", variable=self.radio_var_speed, value=1)
+        self.radio_button_slow.grid(row=2, column=1, pady=10, padx=20, sticky="n")
         
         
         # create frame for languages
         self.available_languages_frame = customtkinter.CTkFrame(self.option_frame)
-        self.available_languages_frame.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
+        self.available_languages_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0))
         
         # create option menu for available language 
         self.available_languages_frame_label = customtkinter.CTkLabel(self.available_languages_frame, text="Available languages:", anchor="w")
@@ -184,7 +184,7 @@ class App(customtkinter.CTk):
 
         # Create frame for output button
         self.output_frame_tts = customtkinter.CTkFrame(self.option_frame)
-        self.output_frame_tts.grid(row=0, column=3, padx=(20, 20), pady=(20, 0))
+        self.output_frame_tts.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
         # Create buttons for output
         self.speak_button = customtkinter.CTkButton(self.output_frame_tts, text="Speak", command=self.speak_now)
         self.speak_button.grid(row=0, column=0, padx=20, pady=10)
@@ -251,7 +251,8 @@ class App(customtkinter.CTk):
     def speak_now(self):
         text_from_textbox_tts = self.textbox_tts.get("0.0", "end")
         # gender = self.radio_var_voice.get()
-        # speed = self.radio_var_speed.get()
+        speed = self.radio_var_speed.get()
+        is_slow = False
         # voices = engine.getProperty("voices")
 
         # def setvoice():
@@ -262,27 +263,29 @@ class App(customtkinter.CTk):
         #     engine.say(text_from_textbox_tts)
         #     engine.runAndWait()
 
-        # if text_from_textbox_tts: 
-        #     if speed == 0: # fast
-        #         engine.setProperty("rate", 250)
-        #         setvoice()
-        #     elif speed == 1: # normal
-        #         engine.setProperty("rate", 175)
-        #         setvoice()
-        #     else:
-        #         engine.setProperty("rate", 75) # slow
-        #         setvoice()
+        if text_from_textbox_tts: 
+            if speed == 1: # normal
+                is_slow = True
+                # engine.setProperty("rate", 250)
+            #     setvoice()
+            # elif speed == 1: # slow
+            #     engine.setProperty("rate", 175)
+            #     setvoice()
+            # else:
+            #     engine.setProperty("rate", 75) # slow
+            #     setvoice()
         # Language in which you want to convert 
         # print(self.choose_language)
+        print(is_slow)
         language = list(langs.keys())[list(langs.values()).index(language_choosed)]
         # Passing the text and language to the engine,  
         # here we have marked slow=False. Which tells  
         # the module that the converted audio should  
         # have a high speed 
-        myobj = gTTS(text=text_from_textbox_tts, lang=language, slow=False)
+        myobj = gTTS(text=text_from_textbox_tts, lang=language, slow=is_slow)
         # Saving the converted audio in a mp3 file named 
         # welcome  
-        myobj.save("welcome.mp3") 
+        myobj.save("output.mp3") 
         
         # Playing the converted file 
         os.system("mpg321 welcome.mp3") 
@@ -290,44 +293,7 @@ class App(customtkinter.CTk):
         # print(gender, speed)
                 
     
-    # # Save file
-    # def save_file_tts(self):
-    #     # for i in self.master.winfo_children():
-    #     #     i.destroy()
-    #     self.saveFileTTsFrame = ttk.Frame(self.master)
-    #     self.saveFileTTsFrame.pack(pady=20)
-    #     self.save_entry = ttk.Entry(self.saveFileTTsFrame, width=40, font=self.font)
-    #     self.name = ttk.Entry(self.saveFileTTsFrame, width=40, font=self.font)
-    #     self.save_button = ttk.Button(self.saveFileTTsFrame, text="Save", style='TButton', command=self.save_voice)
-    #     self.directory_selector_button = ttk.Button(self.saveFileTTsFrame, text="Select Directory", style='TButton', command=self.select_directory)
-    #     label1 = ttk.Label(self.saveFileTTsFrame, text="Enter your text:", style='TLabel', font=self.font)
-    #     label2 = ttk.Label(self.saveFileTTsFrame, text="Enter file name (without .mp3):", style='TLabel', font=self.font)
-    #     label1.grid(row=0, column=0)
-    #     label2.grid(row=1, column=0)
-    #     self.save_entry.grid(row=0, column=1)
-    #     self.name.grid(row=1, column=1)
-    #     self.save_button.grid(row=2, column=1)
-    #     self.directory_selector_button.grid(row=3, column=1)
-    #     self.add_back_button(self.textToSpeech)
-
-    # def select_directory(self):
-    #     directory_path = filedialog.askdirectory()
-    #     if directory_path:
-    #         self.directory_path = directory_path
-    #         self.directory_selector_button.config(text="Selected Directory: " + directory_path)
-
-    # def save_voice(self):
-    #     filename = self.name.get()
-    #     language = 'en'
-    #     text_to_save = self.save_entry.get()
-    #     if hasattr(self, "directory_path"):
-    #         speech = gTTS(text=text_to_save, lang=language, slow=False, tld="us")
-    #         file_path = f"{self.directory_path}/{filename}.mp3"
-    #         speech.save(file_path)
-    #         self.directory_selector_button.config(text="Select Directory")
-    #         messagebox.showinfo("File Saved", f"File '{filename}.mp3' saved to directory '{self.directory_path}'.")
-    #     else:
-    #         messagebox.showerror("Error", "Please select a directory to save the file.")
+   
                 
     # Define functions for button actions
     def start_recognition(self):
@@ -405,7 +371,7 @@ class App(customtkinter.CTk):
     def choose_language(self, language):
         global language_choosed
         language_choosed = language
-        print(language_choosed)
+        # print(language_choosed)
         
 
     def open_input_dialog_event(self):
