@@ -1,0 +1,8 @@
+tkinter
+customtkinter
+pyttsx3
+gTTS
+SpeechRecognition
+sounddevice
+Pillow
+deep-translator
