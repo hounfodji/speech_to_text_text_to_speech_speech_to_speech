@@ -1,35 +1,25 @@
-# # Import the required module for text 
-# # to speech conversion 
-# from gtts import gTTS 
+import tkinter as tk
+import pyttsx3
 
-# # This module is imported so that we can 
-# # play the converted audio 
-# import os 
+def speak_text():
+    text = entry.get()
+    engine.say(text)
+    engine.runAndWait()
 
-# # The text that you want to convert to audio 
-# mytext = 'Welcome to geeksforgeeks!'
+# Initialize the Tkinter app
+root = tk.Tk()
+root.title("Speech to Speech App")
 
-# # Language in which you want to convert 
-# language = 'en'
+# Create a text entry field
+entry = tk.Entry(root, width=50)
+entry.pack()
 
-# # Passing the text and language to the engine, 
-# # here we have marked slow=False. Which tells 
-# # the module that the converted audio should 
-# # have a high speed 
-# myobj = gTTS(text=mytext, lang=language, slow=False) 
+# Create a button to speak the entered text
+speak_button = tk.Button(root, text="Speak", command=speak_text)
+speak_button.pack()
 
-# # Saving the converted audio in a mp3 file named 
-# # welcome 
-# myobj.save("welcome.mp3") 
+# Initialize the text-to-speech engine
+engine = pyttsx3.init()
 
-# # Playing the converted file 
-# os.system("mpg321 welcome.mp3") 
-
-my_dict = {"name": "John Doe", "age": 30, "city": "New York"}
-
-# Get the key corresponding to the value 30
-key = list(my_dict.keys())[list(my_dict.values()).index(30)]
-
-# Print the key
-print(key)
-
+# Run the Tkinter main loop
+root.mainloop()

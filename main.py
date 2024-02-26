@@ -115,8 +115,6 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
-        # self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, text="Text to Speech", command=self.sidebar_button_event)
-        # self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
 
         self.sidebar_button_groupe_member = customtkinter.CTkButton(self.sidebar_frame, text="Author", command=self.open_group_member_window)
         self.sidebar_button_groupe_member.grid(row=1, column=0, padx=20, pady=10)
@@ -138,6 +136,50 @@ class App(customtkinter.CTk):
         self.tabview.add("Speech To Speech")
         self.tabview.tab("Text To Speech").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
         self.tabview.tab("Speech To Text").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Speech To Speech").grid_columnconfigure(0, weight=1)
+        
+        # ---------------------Speech to text panel-------------------------------
+        self.textbox_stt = customtkinter.CTkTextbox(self.tabview.tab("Speech To Text"), width=700, height=250)
+        self.textbox_stt.grid(row=1, column=1, padx=50, pady=(20,10))
+
+        # Frame for speak language
+        self.option_frame_stt = customtkinter.CTkFrame(self.tabview.tab("Speech To Text"))
+        self.option_frame_stt.grid(row=2, column=1, padx=(20, 20), pady=(20, 0))
+
+        # create radiobutton frame for speak language selection
+        self.speak_language_frame = customtkinter.CTkFrame(self.option_frame_stt)
+        self.speak_language_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0))
+        self.radio_var_speak_language = tkinter.IntVar(value=0)
+        self.label_radio_group_speak_language = customtkinter.CTkLabel(master=self.speak_language_frame, text="Speak language")
+        self.label_radio_group_speak_language.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
+        self.radio_button_english = customtkinter.CTkRadioButton(master=self.speak_language_frame, text="English", variable=self.radio_var_speak_language, value=0)
+        self.radio_button_english.grid(row=1, column=1, pady=10, padx=20, sticky="n")
+        self.radio_button_french = customtkinter.CTkRadioButton(master=self.speak_language_frame, text="French", variable=self.radio_var_speak_language, value=1)
+        self.radio_button_french.grid(row=2, column=1, pady=10, padx=20, sticky="n")
+
+        # create radiobutton frame for translate language selection
+        self.translate_language_frame = customtkinter.CTkFrame(self.option_frame_stt)
+        self.translate_language_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0))
+        self.radio_var_translate_language = tkinter.IntVar(value=0)
+        self.label_radio_group_translate_language = customtkinter.CTkLabel(master=self.translate_language_frame, text="Translate In: ")
+        self.label_radio_group_translate_language.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
+        self.radio_button_english = customtkinter.CTkRadioButton(master=self.translate_language_frame, text="English", variable=self.radio_var_translate_language, value=0)
+        self.radio_button_english.grid(row=1, column=1, pady=10, padx=20, sticky="n")
+        self.radio_button_french = customtkinter.CTkRadioButton(master=self.translate_language_frame, text="French", variable=self.radio_var_translate_language, value=1)
+        self.radio_button_french.grid(row=2, column=1, pady=10, padx=20, sticky="n")
+        
+
+        # Create buttons for output
+        self.output_frame_stt = customtkinter.CTkFrame(self.option_frame_stt)
+        self.output_frame_stt.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
+
+        self.speak_button_tts = customtkinter.CTkButton(self.output_frame_stt, text="Speak", image=self.image_icon_image, compound="right", command=self.start_recognition)
+        self.speak_button_tts.grid(row=0, column=0, padx=20, pady=10)
+
+        self.speak_button = customtkinter.CTkButton(self.output_frame_stt, text="Translate", command=self.translate)
+        self.speak_button.grid(row=1, column=0, padx=20, pady=10)
+        
+        
 
         # -----------------------Text To Speech panel-----------------------------
         self.textbox_tts = customtkinter.CTkTextbox(self.tabview.tab("Text To Speech"), width=700, height=250)
@@ -145,17 +187,6 @@ class App(customtkinter.CTk):
 
         self.option_frame = customtkinter.CTkFrame(self.tabview.tab("Text To Speech"))
         self.option_frame.grid(row=2, column=1, padx=(20, 20), pady=(20, 0))
-
-        # create radiobutton frame for voice
-        # self.voice_frame = customtkinter.CTkFrame(self.option_frame)
-        # self.voice_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0))
-        # self.radio_var_voice = tkinter.IntVar(value=0)
-        # self.label_radio_group_voice = customtkinter.CTkLabel(master=self.voice_frame, text="Voice")
-        # self.label_radio_group_voice.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
-        # self.radio_button_male = customtkinter.CTkRadioButton(master=self.voice_frame, text="Male", variable=self.radio_var_voice, value=0)
-        # self.radio_button_male.grid(row=1, column=1, pady=10, padx=20, sticky="n")
-        # self.radio_button_female = customtkinter.CTkRadioButton(master=self.voice_frame, text="Female", variable=self.radio_var_voice, value=1)
-        # self.radio_button_female.grid(row=2, column=1, pady=10, padx=20, sticky="n")
 
         # create radiobutton frame for speed
         self.speed_frame = customtkinter.CTkFrame(self.option_frame)
@@ -191,62 +222,23 @@ class App(customtkinter.CTk):
 
         self.convert_button = customtkinter.CTkButton(self.output_frame_tts, text="Convert", command=self.open_audio_window)
         self.convert_button.grid(row=1, column=0, padx=20, pady=10)
-
-        # self.generate_audio_button = customtkinter.CTkButton(self.output_frame, text="Generate audio file",
-        #                                                    command=self.open_audio_window)
-        # self.generate_audio_button.grid(row=1, column=0, padx=20, pady=(10, 10))
-
-        # # Generate audio file window
-        # self.audio_window = None
-
-        # ---------------------Speech to text panel-------------------------------
-        self.textbox_stt = customtkinter.CTkTextbox(self.tabview.tab("Speech To Text"), width=700, height=250)
-        self.textbox_stt.grid(row=1, column=1, padx=50, pady=(20,10))
-
-        # Frame for speak language
-        self.option_frame_stt = customtkinter.CTkFrame(self.tabview.tab("Speech To Text"))
-        self.option_frame_stt.grid(row=2, column=1, padx=(20, 20), pady=(20, 0))
-
-       
-
-
-        # create radiobutton frame for speak language selection
-        self.speak_language_frame = customtkinter.CTkFrame(self.option_frame_stt)
-        self.speak_language_frame.grid(row=0, column=0, padx=(20, 20), pady=(20, 0))
-        self.radio_var_speak_language = tkinter.IntVar(value=0)
-        self.label_radio_group_speak_language = customtkinter.CTkLabel(master=self.speak_language_frame, text="Speak language")
-        self.label_radio_group_speak_language.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
-        self.radio_button_english = customtkinter.CTkRadioButton(master=self.speak_language_frame, text="English", variable=self.radio_var_speak_language, value=0)
-        self.radio_button_english.grid(row=1, column=1, pady=10, padx=20, sticky="n")
-        self.radio_button_french = customtkinter.CTkRadioButton(master=self.speak_language_frame, text="French", variable=self.radio_var_speak_language, value=1)
-        self.radio_button_french.grid(row=2, column=1, pady=10, padx=20, sticky="n")
-
-        # create radiobutton frame for translate language selection
-        self.translate_language_frame = customtkinter.CTkFrame(self.option_frame_stt)
-        self.translate_language_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0))
-        self.radio_var_translate_language = tkinter.IntVar(value=0)
-        self.label_radio_group_translate_language = customtkinter.CTkLabel(master=self.translate_language_frame, text="Translate In: ")
-        self.label_radio_group_translate_language.grid(row=0, column=1, columnspan=1, padx=10, pady=10, sticky="")
-        self.radio_button_english = customtkinter.CTkRadioButton(master=self.translate_language_frame, text="English", variable=self.radio_var_translate_language, value=0)
-        self.radio_button_english.grid(row=1, column=1, pady=10, padx=20, sticky="n")
-        self.radio_button_french = customtkinter.CTkRadioButton(master=self.translate_language_frame, text="French", variable=self.radio_var_translate_language, value=1)
-        self.radio_button_french.grid(row=2, column=1, pady=10, padx=20, sticky="n")
         
+        
+        # -----------------------Speech To Speech panel-----------------------------
+        self.option_frame = customtkinter.CTkFrame(self.tabview.tab("Speech To Speech"))
+        self.option_frame.grid(row=1, column=0, padx=(20, 20), pady=(20, 0))
+        
+        # recording audio button
+        self.speak_button_sts = customtkinter.CTkButton(self.option_frame, text="Speak", image=self.image_icon_image, compound="right", command=self.start_recognition)
+        self.speak_button_sts.grid(row=0, column=0, padx=20, pady=10)
+        
+        # listening audio button
+        self.listen_button_sts = customtkinter.CTkButton(self.option_frame, text="Listen", command=self.open_audio_window)
+        self.listen_button_sts.grid(row=1, column=0, padx=20, pady=10)
         
         
 
-        # Create buttons for output
-        self.output_frame_stt = customtkinter.CTkFrame(self.option_frame_stt)
-        self.output_frame_stt.grid(row=0, column=2, padx=(20, 20), pady=(20, 0))
 
-        self.speak_button_tts = customtkinter.CTkButton(self.output_frame_stt, text="Speak", image=self.image_icon_image, compound="right", command=self.start_recognition)
-        self.speak_button_tts.grid(row=0, column=0, padx=20, pady=10)
-
-        self.speak_button = customtkinter.CTkButton(self.output_frame_stt, text="Translate", command=self.translate)
-        self.speak_button.grid(row=1, column=0, padx=20, pady=10)
-
-        
-      
     # Play instanly
     def speak_now(self):
         text_from_textbox_tts = self.textbox_tts.get("0.0", "end")
@@ -266,17 +258,8 @@ class App(customtkinter.CTk):
         if text_from_textbox_tts: 
             if speed == 1: # normal
                 is_slow = True
-                # engine.setProperty("rate", 250)
-            #     setvoice()
-            # elif speed == 1: # slow
-            #     engine.setProperty("rate", 175)
-            #     setvoice()
-            # else:
-            #     engine.setProperty("rate", 75) # slow
-            #     setvoice()
-        # Language in which you want to convert 
-        # print(self.choose_language)
-        print(is_slow)
+        
+        # explore langs list and take langs keys(fr, en)
         language = list(langs.keys())[list(langs.values()).index(language_choosed)]
         # Passing the text and language to the engine,  
         # here we have marked slow=False. Which tells  
@@ -288,7 +271,7 @@ class App(customtkinter.CTk):
         myobj.save("output.mp3") 
         
         # Playing the converted file 
-        os.system("mpg321 welcome.mp3") 
+        os.system("mpg321 output.mp3") 
         
         # print(gender, speed)
                 
@@ -297,6 +280,7 @@ class App(customtkinter.CTk):
                 
     # Define functions for button actions
     def start_recognition(self):
+        self.textbox_stt.delete("0.0", "end")
 
         global recognized_text  # Utilise la variable globale
         global text_to_translate  # Utilise la variable globale
@@ -315,26 +299,26 @@ class App(customtkinter.CTk):
                 print("Adjusting noise...")
                 recognizer.adjust_for_ambient_noise(source, duration=1)
                 print("Recording...")
-                audio = recognizer.listen(source )
+                # audio = recognizer.listen(source, timeout=30)
+                audio = recognizer.listen(source)
+                recognizer.pause_threshold = 3.0
+                # recognizer.phrase_threshold = 0.2
+                recognizer.non_speaking_duration = 2.9
                 print("Done recording.")
 
 
                 recognized_text = recognizer.recognize_google(audio, language=speak_language_string)
                 # Efface le contenu actuel de text_speach_area
                 self.textbox_stt.delete("0.0", "end")
-                # Insère le nouveau texte reconnu dans text_speach_area
+                # Insère le nouveau texte reconnu dans speach_to_text_area
                 self.textbox_stt.insert("end", recognized_text)
-
+                
+                # insert recognided_text in the text_to_speech_area
+                self.textbox_tts.insert("end", recognized_text)
 
                 text_to_translate = self.textbox_stt.get("0.0", "end")
                 # print(text_to_translate)
 
-               
-                # text = recognizer.recognize_google(audio, language="en-US")
-                # text_speach_area.config(text=f"Recognized Text: {text}")
-                # text_speach_area.config(width=None)
-                # text_speach_area.config(font=("Arial", 14))
-                # text_speach_area.config(wraplength=None)
 
         except sr.WaitTimeoutError:
             self.textbox_stt.configure(text="Recording timed out.")
@@ -428,19 +412,7 @@ class AudioWindow(customtkinter.CTkToplevel):
         self.geometry("400x300")
 
 
-        # create main entry and button
-        # self.entry = customtkinter.CTkEntry(self, width=350, placeholder_text="Enter the filename without mp3")
-        # self.entry.grid(row=0, column=0, padx=(20, 0), pady=(20, 20), sticky="nsew")
-
-        # self.select_directory_button = customtkinter.CTkButton(master=self, text="Select Directory", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=select_directory)
-        # self.select_directory_button.grid(row=1, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
-
-        # def select_directory(self):
-        #     directory_path = filedialog.askdirectory()
-        #     if directory_path:
-        #         self.directory_path = directory_path
-        #         # self.directory_selector_button.config(text="Selected Directory: " + directory_path)
-        #     print(directory_path)
+       
 
 if __name__ == "__main__":
     app = App()
