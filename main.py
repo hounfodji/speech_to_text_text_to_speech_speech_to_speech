@@ -266,7 +266,7 @@ class App(customtkinter.CTk):
     def speak_now_tts(self):
         text_from_textbox_tts = self.textbox_tts.get("0.0", "end")
         # gender = self.radio_var_voice.get()
-        speed = self.radio_var_speed.get()
+        speed = self.radio_var_speed_tts.get()
         is_slow = False
 
         if text_from_textbox_tts:
@@ -362,6 +362,7 @@ class App(customtkinter.CTk):
         # Efface le contenu actuel de text_speach_area
         self.textbox_stt.delete("0.0", "end")
         self.textbox_stt.insert("end", text_translated)
+        self.textbox_tts.delete("0.0", "end")
         self.textbox_tts.insert("0.0", text_translated)
 
     def choose_language(self, language):

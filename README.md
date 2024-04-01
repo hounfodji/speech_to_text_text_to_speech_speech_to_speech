@@ -17,6 +17,9 @@ pip install -r requirements.txt
 ### Run
 python3 main.py
 
+### Demo
+[![Watch the video](https://github.com/hounfodji/speech_to_text_text_to_speech_speech_to_speech/blob/main/images/execution/Screenshot%20from%202024-02-26%2022-29-20.png)](https://youtu.be/IjiFFTSkWaI)
+
 ### Screenshots
 ![image](https://github.com/hounfodji/speech_to_text_text_to_speech_speech_to_speech/blob/main/images/execution/Screenshot%20from%202024-02-26%2022-29-20.png?raw=true)
 ![image](https://github.com/hounfodji/speech_to_text_text_to_speech_speech_to_speech/blob/main/images/execution/Screenshot%20from%202024-02-26%2022-29-54.png?raw=true)
